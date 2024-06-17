@@ -56,3 +56,5 @@ out
 .npm/
 .profile
 .rustup/
+/docs/shared/tutorials/newNXWorkspaceNPMPackageBasedMonorepo/org/packages/.gitkeep
+/docs/shared/tutorials/newNXWorkspacePNPMPackageStandaloneProject/org/.vscode/extensions.json
