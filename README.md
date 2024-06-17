@@ -20,16 +20,32 @@
 <hr>
 
 # Smart Monorepos · Fast CI
+* := Build system
+  * characteristics
+    * open source
+    * smart
+    * fast
+    * extensible
+    * 1@ class monorepo-support
+    * powerful integrations
+    * workspace maintainable
+    * easy scaling of # of projects
+  * allows
+    * enhancing developer productivity
+    * optimizing CI performance
+    * maintaining code quality
+  * 👁️techniques used 👁️
+    * distributed task execution
+    * computation caching
+    * remote caching
 
-Nx is a build system with built-in tooling and advanced CI capabilities. It helps you maintain and scale monorepos, both locally and on CI.
+* Links to help you get started:
+  - [Nx.Dev: Documentation, Guides, Interactive Tutorials](https://nx.dev)
+  - [Nx.Dev: Core Tutorials](https://nx.dev/getting-started/intro)
+  - [Recipe: Adding Nx to an Existing Monorepo](https://nx.dev/recipes/adopting-nx/adding-to-monorepo)
+  - [Official Nx YouTube Channel](https://www.youtube.com/@NxDevtools)
+  - [Blog Posts About Nx](https://blog.nrwl.io/nx/home)
 
-A few links to help you get started:
-
-- [Nx.Dev: Documentation, Guides, Interactive Tutorials](https://nx.dev)
-- [Nx.Dev: Core Tutorials](https://nx.dev/getting-started/intro)
-- [Recipe: Adding Nx to an Existing Monorepo](https://nx.dev/recipes/adopting-nx/adding-to-monorepo)
-- [Official Nx YouTube Channel](https://www.youtube.com/@NxDevtools)
-- [Blog Posts About Nx](https://blog.nrwl.io/nx/home)
 
 <p style="text-align: center;"><a href="https://nx.dev/#learning-materials" target="_blank" rel="noreferrer"><img src="./images/nx-courses-and-videos.svg" 
 width="100%" alt="Nx - Smart Monorepos · Fast CI"></a></p>
