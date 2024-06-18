@@ -56,4 +56,4 @@
 
 ## Nx Cloud
 * TODO:
-
+* Check [video](https://www.youtube.com/watch?v=4VI-q943J3o)
