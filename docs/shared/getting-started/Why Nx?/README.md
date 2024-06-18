@@ -2,7 +2,7 @@
   * add as dependency
     * -> you can use `nx COMMAND` to run your package.json scripts
   * `npx nx@latest init`
-    * initialize a project
+    * existing project -- is migrated to -> nx
 * Why to use?
   * caching technique used behind
   * tasks run in parallel
