@@ -22,9 +22,7 @@
     * Check '../nx-api/documents/run-many'
   * / projects adjusted by a PR -- `npx nx affected -t targetName` / `nx affected -t targetName` --
     * Check '../ci/features/affected'
-    * _Example:_ `npx nx affected -t test` / `nx affected -t test` 
-* TODO:
-* 
+    * _Example:_ `npx nx affected -t test` / `nx affected -t test`
 
 ## Notes
 * `npx nx ....` vs `nx ...`
