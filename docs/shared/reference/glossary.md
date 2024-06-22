@@ -1,12 +1,11 @@
 # Glossary
-
-This is a short list of Nx-specific terms that will help you understand the rest of the documentation.
+* short list of Nx-specific terms
 
 ## Terms
 
 ### Application
-
-A [project](#project) that can run on its own. Generally uses [libraries](#library).
+* := [project](#project) / can run on its own 
+  * Generally uses [libraries](#library)
 
 ### Atomizer
 
@@ -23,10 +22,11 @@ A [library](#library) that has a `build` [target](#target). Some libraries can b
 > See: [Publishable and Buildable Nx Libraries](/concepts/buildable-and-publishable-libraries)
 
 ### Cache
-
-A mechanism for saving the output of a calculation so it can be replayed later without actually performing the calculation again.
-
-> See: [Cache Task Results](/features/cache-task-results)
+* := mechanism /
+  * allows 
+    * saving the output of a calculation
+      * -> it can be 👁️replayed later without performing the calculation again 👁️
+* Check [Cache Task Results](/features/cache-task-results)
 
 ### Cache Hit
 
@@ -61,16 +61,14 @@ grouping is done automatically. In almost all cases, this detection will be a
 1:1 match with your CI provider's concept of a "pipeline" or "workflow".
 
 ### Command
-
-Anything you run in the terminal. An example command that invokes a [task](#task) is `nx build my-app`.
-
-> See: [Run Tasks](/features/run-tasks)
+* := Anything / you run in the terminal
+  * _Example:_ `nx build my-app` -- command / invokes a [task](#task) -- 
+* Check [Run Tasks](/features/run-tasks)
 
 ### Configurations
-
-A set of preconfigured options for a [target](#target) that should be enabled altogether. For example, a `production` configuration would set all the options needed for a build that could be deployed to production.
-
-> See: [Use Task Configurations](/concepts/executors-and-configurations#use-task-configurations)
+* := set of preconfigured options for a [target](#target) / should be enabled altogether
+  * _Example:_ `production` configuration would set all the options / needed for a build to deploy to production
+* Check [Use Task Configurations](/concepts/executors-and-configurations#use-task-configurations)
 
 ### Distributed Task Execution
 
@@ -79,10 +77,10 @@ A system for running [tasks](#task) in CI across multiple agent processes across
 > See: [Distribute Task Execution](/ci/features/distribute-task-execution)
 
 ### Executor
-
-A script that performs some action on your code. This can include building, linting, testing, serving and many other actions. A [target](#target) configuration specifies an executor and a set of options. Executors can be found in [plugins](#plugin).
-
-> See: [Executors and Configurations](/concepts/executors-and-configurations)
+* := script / 👁️performs some action on your code 👁️
+  * *Example:* building, linting, testing, serving, ...
+  * belong to each [plugins](#plugin)
+* Check [Executors and Configurations](/concepts/executors-and-configurations)
 
 ### Flaky Tasks
 
@@ -91,16 +89,20 @@ Tasks that will sometimes succeed and sometimes fail without any change to the i
 > See: [Identify and Re-run Flaky Tasks](/ci/features/flaky-tasks)
 
 ### Generator
-
-A script that creates or modifies your code. Generators can be found in [plugins](#plugin).
-
-> See: [Use Code Generators](/features/generate-code)
+* := script / 👁️creates or modifies your code 👁️
+  * belong to each [plugins](#plugin)
+* Check [Use Code Generators](/features/generate-code)
 
 ### Graph
-
-A computer science concept that consists of nodes connected by edges. In the Nx context, there are two graphs: the [project](#project) graph which describes dependencies between projects and the [task](#task) graph which describes dependencies between tasks.
-
-> See: [Explore the Graph](/features/explore-graph)
+* := nodes / connected by edges.
+* types in Nx
+  * [project](#project) graph
+    * allows
+      * projectX -- check if it depends on -- projectY
+  * [task](#task) graph
+    * allows
+      * taskX -- check if it depends on -- taskY
+* Check [Explore the Graph](/features/explore-graph)
 
 ### Integrated Repository
 
@@ -115,18 +117,17 @@ Launch Templates are used to set up an agent machine. They specify a resource cl
 > See: [Launch Templates](/ci/reference/launch-templates)
 
 ### Library
-
-A [project](#project) that is used by [applications](#application) or other [libraries](#library).
+* [project](#project) / used by 
+  * [applications](#application) OR
+  * other [libraries](#library)
 
 ### Monolith
-
-A large [application](#application) that is difficult to separate into smaller pieces.
+* := large [application](#application) / is difficult -- to separate into -- smaller pieces
 
 ### Monorepo
+* := repository / multiple [projects](#project)
+* Check [monorepo.tools](https://monorepo.tools)
 
-A repository with multiple [projects](#project).
-
-> See: [monorepo.tools](https://monorepo.tools)
 
 ### Nested Project
 
@@ -151,8 +152,7 @@ Nx Replay is the product offered by [Nx Cloud](#nx-cloud) that enables [remote c
 > See: [Use Remote Caching](/ci/features/remote-cache)
 
 ### Package
-
-A [project](#project). It is sometimes published as an npm package.
+* == [project](#project) / sometimes published as an npm package
 
 ### Package-based Repository
 
@@ -161,18 +161,21 @@ A repository using Nx without [plugins](#plugin) that prioritizes the independen
 > See: [Integrated Repos vs. Package-Based Repos](/concepts/integrated-vs-package-based)
 
 ### Plugin
-
-A set of [executors](#executor), [generators](#generator) and other code that extends the functionality of Nx. May be installed from a package manager like NPM or developed directly in the repository.
-
-> See: [Create Your Own Plugin](/extending-nx/intro/getting-started)
+* := set of [executors](#executor) + [generators](#generator) + other code / extends the functionality of Nx
+  * how to install it ?
+    * from a package manager -- _Example:_ npm --
+    * develop directly in the repository
+* Check [Create Your Own Plugin](/extending-nx/intro/getting-started)
 
 ### Polyrepo
 
 Related [projects](#project) spread across multiple repositories.
 
 ### Project
-
-The unit of code on which a [task](#task) can be run. A project can be an [application](#application) or a [library](#library).
+* := unit of code on which a [task](#task) can be run
+  * types
+    * [application](#application) or
+    * [library](#library)
 
 ### Publishable Library
 
@@ -191,15 +194,16 @@ A [cache](#cache) that can be shared between all developers using the repo and t
 A [project](#project) that has its own root folder at the root of the repository. Every other project in the repo is a [nested project](#nested-project).
 
 ### Run
-
-Runs in Nx Cloud are Nx commands that result in some number of `Task`s being performed.
-
-- `nx run my-app:build` is a run that performs a single task
-- `nx run-many -t test,build` is a run that performs many tasks.
-- `nx affected -t test,build` is a run that performs zero to many tasks.
-
-When a run exists in a CI environment, Nx Cloud will automatically associate it
-with the appropriate `Run Group` and `CI Pipeline Execution`
+* == Nx commands / perform some `Task`s
+  * _Example:_
+    * `nx run my-app:build` == run / performs 1! task
+    * `nx run-many -t test,build` == run / performs >1 tasks
+    * `nx affected -t test,build` == run / performs >=0 tasks
+* In CI environment
+  * if you use Nx Cloud
+    * automatically associate it with the appropiated
+      * `Run Group` &
+      * `CI Pipeline Execution`
 
 ### Run Group
 
@@ -216,16 +220,16 @@ run group. This means each additional run group requires its own pool of agents.
 A repository with a single [application](#application) at the [root level](#root-level-project). This set up is made possible in Nx 15.3.
 
 ### Target
-
-The name of an action taken on a [project](#project).
-
-> See: [Run Tasks](/features/run-tasks)
++ := name of an action | a [project](#project)
+  + how to configure it?
+    * specify 
+      * executor &
+      * set of options
++ Check [Run Tasks](/features/run-tasks)
 
 ### Task
-
-An invocation of a [target](#target) on a specific [project](#project).
-
-> See: [Run Tasks](/features/run-tasks)
+* := invocation of a [target](#target) | specific [project](#project)
+* Check [Run Tasks](/features/run-tasks)
 
 ### Task Pipeline
 
@@ -234,5 +238,6 @@ The set of dependencies between [tasks](#task) that ensure that tasks are run in
 > See: [Task Pipeline Configuration](/concepts/task-pipeline-configuration)
 
 ### Workspace
-
-A git repository. An Nx workspace is a git repository using Nx.
+* == git repository
+* Nx workspace
+  * == git repository / using Nx.
