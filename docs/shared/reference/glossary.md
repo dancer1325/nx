@@ -228,7 +228,8 @@ A repository with a single [application](#application) at the [root level](#root
 + Check [Run Tasks](/features/run-tasks)
 
 ### Task
-* := invocation of a [target](#target) | specific [project](#project)
+* := invocation of a [target](#target) | specific Monorepo's [project](#project) (S)
+  * **Note:** 👁️>=1 projects could be affected 👁️
 * Check [Run Tasks](/features/run-tasks)
 
 ### Task Pipeline
