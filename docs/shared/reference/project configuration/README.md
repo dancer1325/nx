@@ -14,6 +14,7 @@
 * Nx merges 'package.json' & 'project.json'
 * ['nx.json' schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
 * ['project.json' schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json)
+  * Check the properties
   * _Examples:_
     * _Example1:_ TODO: Where does `"root"` come from in the previous schema?
       ```
@@ -66,9 +67,9 @@
       }
       ```
 * 'package.json'
-  * TODO: Is there link to the specification to include `nx` ?
+  * `"nx":{}` follows the ['nx.json' schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
   * _Examples:_
-    * _Example1:_
+    * _Example1:_ TODO: Include in a real project
      ```
       {
       "name": "mylib",
@@ -98,4 +99,17 @@
        }
      }
     ```
+    * _Example2:_ Check '../tutorials/projectConfigurationWithPackage'
 * TODO:
+
+## Task Definitions / Targets
+* `.targets`
+  * TODO:
+* inputs & namedInputs
+  * Check 'inputs/'
+  * uses
+    * cacheable tasks
+  * places to define it
+    * 'project.json' `namedInputs`
+    * 'nx.json' `namedInputs`
+  * TODO:
