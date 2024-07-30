@@ -1,67 +1,63 @@
 # Local Executors
 
-Creating Executors for your workspace standardizes scripts that are run during your development/building/deploying tasks in order to provide guidance in the terminal with `--help` and when invoking with [Nx Console](/getting-started/editor-setup)
+* == create Executors | your workspace
+* allows
+  * 👁️standardizing scripts / run -- during your -- development/building/deploying tasks 👁️
+    * -> provide guidance |
+      * terminal -- via  `--help` -- &
+      * invoking with [Nx Console](/getting-started/editor-setup)
 
-This guide shows you how to create, run, and customize executors within your Nx workspace. The examples use the trivial use-case of an `echo` command.
+* Goal here
+  * | your Nx workspace
+    * create,
+    * run,
+    * customize 
 
 ## Creating an executor
 
-If you don't already have a local plugin, use Nx to generate one:
+* create a local plugin
 
-```shell {% skipRescope=true %}
-nx add @nx/plugin
-nx g @nx/plugin:plugin libs/my-plugin
-```
+    ```shell {% skipRescope=true %}
+    nx add @nx/plugin
+    nx g @nx/plugin:plugin libs/my-plugin
+    ```
 
-Use the Nx CLI to generate the initial files needed for your executor.
+* generate the initial files / needed for your executor -- via -- Nx CLI 
 
-```shell
-nx generate @nx/plugin:executor echo --directory=libs/my-plugin/src/executors/echo
-```
+    ```shell
+    nx generate @nx/plugin:executor echo --directory=libs/my-plugin/src/executors/echo
+    ```
 
-After the command is finished, the executor is created in the plugin `executors` folder.
+    * once the command is finished -> executor is created | plugin `executors` folder.
 
-```text
-happynrwl/
-├── apps/
-├── libs/
-│   ├── my-plugin
-│   │   ├── src
-│   │   │   ├── executors
-│   │   │   |   └── echo/
-│   │   │   |   |    ├── executor.spec.ts
-│   │   │   |   |    ├── executor.ts
-│   │   │   |   |    ├── schema.d.ts
-│   │   │   |   |    └── schema.json
-├── nx.json
-├── package.json
-└── tsconfig.base.json
-```
+    ```text
+    happynrwl/
+    ├── apps/
+    ├── libs/
+    │   ├── my-plugin
+    │   │   ├── src
+    │   │   │   ├── executors
+    │   │   │   |   └── echo/
+    │   │   │   |   |    ├── executor.spec.ts
+    │   │   │   |   |    ├── executor.ts
+    │   │   │   |   |    ├── schema.d.ts
+    │   │   │   |   |    └── schema.json
+    ├── nx.json
+    ├── package.json
+    └── tsconfig.base.json
+    ```
 
 ### schema.json
 
-This file describes the options being sent to the executor (very similar to the `schema.json` file of generators). Setting the `cli` property to `nx` indicates that you're using the Nx Devkit to make this executor.
-
-```json
-{
-  "$schema": "https://json-schema.org/schema",
-  "type": "object",
-  "properties": {
-    "textToEcho": {
-      "type": "string",
-      "description": "Text To Echo"
-    }
-  }
-}
-```
-
-This example describes a single option for the executor that is a `string` called `textToEcho`. When using this executor, specify a `textToEcho` property inside the options.
-
-In our `executor.ts` file, we're creating an `Options` interface that matches the json object being described here.
+* == options / being sent to the executor 
+  * == `schema.json` of generators
+* if you set `cli` property | "nx.json" == Nx Devkit -- is used to make -- this executor
 
 ### executor.ts
 
-The `executor.ts` contains the actual code for your executor. Your executor's implementation must export a function that takes an options object and returns a `Promise<{ success: boolean }>`.
+* Your executor's implementation must
+  * export a function / takes an options object and
+  * returns a `Promise<{ success: boolean }>`
 
 ```typescript
 import type { ExecutorContext } from '@nx/devkit';
@@ -92,7 +88,7 @@ export default async function echoExecutor(
 
 ## Running your Executor
 
-Our last step is to add this executor to a given project’s `targets` object in your project's `project.json` file:
+* add this executor | given project’s `targets` object in your project's `project.json` file:
 
 ```jsonc {% fileName="project.json" highlightLines=["5-10"] %}
 {
@@ -109,23 +105,23 @@ Our last step is to add this executor to a given project’s `targets` object in
 }
 ```
 
-Finally, you run the executor via the CLI as follows:
+* run it -- via the -- CLI
 
-```shell
-nx run my-project:echo
-```
+    ```shell
+    nx run my-project:echo
+    ```
 
-To which we'll see the console output:
+    * the console output:
 
-```{% command="nx run my-project:echo" %}
-Executing "echo"...
-Options: {
-  "textToEcho": "Hello World"
-}
-Hello World
-```
+    ```{% command="nx run my-project:echo" %}
+    Executing "echo"...
+    Options: {
+      "textToEcho": "Hello World"
+    }
+    Hello World
+    ```
 
-{% callout type="warning" title="string" %}
+* TODO: From here
 
 Nx uses the paths from `tsconfig.base.json` when running plugins locally, but uses the recommended tsconfig for node 16 for other compiler options. See https://github.com/tsconfig/bases/blob/main/bases/node16.json
 
