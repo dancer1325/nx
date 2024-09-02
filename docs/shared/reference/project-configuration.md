@@ -191,8 +191,12 @@
   * properties / define -- the way that -- Nx should run that task
 
 ### Cache
-* TODO:
-In Nx 17 and higher, caching is configured by specifying `"cache": true` in a target's configuration. This will tell Nx that it's ok to cache the results of a given target. For instance, if you have a target that runs tests, you can specify `"cache": true` in the target default configuration for `test` and Nx will cache the results of running tests.
+
+* requirements
+  * Nx v17+
+* `"targets.target1.cache": true`
+  * cache results / given target
+* _Example:_
 
 ```json {% fileName="project.json" %}
 {
@@ -206,9 +210,17 @@ In Nx 17 and higher, caching is configured by specifying `"cache": true` in a ta
 
 {% callout type="warning" title="Per Project Caching + Distribution" %}
 
-If you are using distributed task execution and disable caching for a given target, you will not be able to use distributed task execution for that target. This is because distributed task execution requires caching to be enabled. This means that the target you have disabled caching for, and any targets which depend on that target will fail the pipeline if you try to run them with Nx Agents enabled.
+* if you are using distributed task execution & disable caching / given target -> NOT able to use distributed task execution / target
+  * Reason: 🧠 distributed task execution -- requires -- caching 🧠
+  * -> target / disabled caching & ANY targets / -- depend on -- that target & you run them with Nx Agents -> will fail the pipeline 
 
 {% /callout %}
+* default locations
+  * `{workspaceRoot}/dist/{projectRoot}`,
+  * `{projectRoot}/build`,
+  * `{projectRoot}/dist`,
+  * `{projectRoot}/public`
+
 
 ### Inputs and Named Inputs
 
@@ -243,26 +255,17 @@ If you are using distributed task execution and disable caching for a given targ
 
 ### Outputs
 
-Targets may define outputs to tell Nx where the target is going to create file artifacts that Nx should cache. `"outputs": ["{workspaceRoot}/dist/libs/mylib"]` tells Nx where the `build` target is going to create file artifacts.
-
-This configuration is usually not needed. Nx comes with reasonable defaults (imported in `nx.json`) which implement the configuration above.
-
-Specifically, by default, the following locations are cached for builds:
-
-- `{workspaceRoot}/dist/{projectRoot}`,
-- `{projectRoot}/build`,
-- `{projectRoot}/dist`,
-- `{projectRoot}/public`
+* `targets.target1.outputs`
+* := paths / contain file artifacts created by Nx' target
+  * Nx would cache these paths
+* optional
 
 {% cards %}
 {% card title="Configure Outputs for Task Caching" type="documentation" description="This recipes walks gives helpful tips to configure `outputs` for tasks" url="/recipes/running-tasks/configure-outputs" /%}
 {% /cards %}
 
-Read the [configure outputs for task caching](/recipes/running-tasks/configure-outputs) recipe for helpful tips for setting outputs.
-
-#### Basic Example
-
-Usually, a target writes to a specific directory or a file. The following instructs Nx to cache `dist/libs/mylib` and `build/libs/mylib/main.js`:
+* [configure outputs for task caching](/recipes/running-tasks/configure-outputs)
+* _Example:_ Nx cache to `dist/libs/mylib` and `build/libs/mylib/main.js`
 
 ```json
 {
@@ -279,6 +282,7 @@ Usually, a target writes to a specific directory or a file. The following instru
 
 #### Specifying Globs
 
+* TODO:
 Sometimes, multiple targets might write to the same directory. When possible it is recommended to direct these targets into separate directories.
 
 ```json
