@@ -106,13 +106,18 @@ The single-project workspace setup follows a similar structure to what the Angul
 
 ### project.json vs angular.json
 
-Nx configures projects and their targets in a format similar to `angular.json`. However, instead of storing the configuration for every project in a single large `angular.json` file at the root, the configuration is split into multiple `project.json` files, one for each project.
-
-Smaller, focused config files allow you to quickly find the relevant configuration for the project you are working on, and editing a single project configuration does not cause the `nx affected` command to rerun all the tests in the repo. This conversion is done automatically when you run `nx init`.
-
-Note that even though the configuration is split, everything works similarly. Migrations and schematics written with the Angular devkit that expect a single `angular.json` file will receive a single file. Nx is smart, so it merges all the files in memory to make those migrations and schematics work.
-
-More details: Nx [project configuration](/reference/project-configuration).
+* Nx's projects & targets format == `angular.json`
+* 👁️number of configuration files 👁️
+  * `angular.json`
+    * 1! file | root / EVERY project
+  * Nx
+    * multiple `project.json`
+    * 1 `project.json` / each project
+* Migrations and schematics / -- done by the -- Angular devkit 
+  * -- expect a -- `angular.json`
+  * ALSO work | Nx
+    * Reason: 🧠Nx handles it by you automatically 🧠
+* check [Nx project configuration](/reference/project-configuration)
 
 ### Executors vs. Builders, Generators vs. Schematics
 
