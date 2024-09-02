@@ -1,17 +1,19 @@
 # Project Configuration
 
-A project's configuration is constructed by Nx from three sources:
+* Sources to build project's configuration / lower override previous one
+    * [Tasks inferred by Nx plugins](/concepts/inferred-tasks)
+    * 'nx.json' `targetDefaults` -- [Workspace `targetDefaults`](/reference/nx-json#target-defaults) --
+    * project level configuration files
+        * 'package.json'
+        * 'project.json'
+* ways to visualize project configuration -- _Example:_ Check [githubRepoExample](https://github.com/nrwl/nx-examples) --
+    * [Nx Console](/getting-started/editor-setup)
+    * `nx show project projectName --web`
+      * `--web`
+        * default one
+        * display | browser
 
-1. [Tasks inferred by Nx plugins](/concepts/inferred-tasks) from tooling configuration
-2. [Workspace `targetDefaults`](/reference/nx-json#target-defaults) defined in the `nx.json` file
-3. Individual project level configuration files (`package.json` and `project.json`)
-
-Each source will [overwrite the previous source](/recipes/running-tasks/pass-args-to-commands). That means `targetDefaults` will overwrite inferred tasks and project level configuration will overwrite both `targetDefaults` and inferred tasks. The combined project configuration can be viewed in the project details view by using [Nx Console](/getting-started/editor-setup) in your IDE or by running:
-
-```shell
-nx show project myproject --web
-```
-
+* _Example:_
 {% project-details title="Project Details View" height="100px" %}
 
 ```json
@@ -55,133 +57,141 @@ nx show project myproject --web
 
 {% /project-details %}
 
-The project details view also shows where each setting is defined so that you know where to change it.
-
 ## Project Level Configuration Files
 
-If you need to edit your project settings or modify an inferred task, you can do so in either `package.json` or `project.json` files. The examples on this page show both styles, and the only functional difference is that tasks that use executors must be defined in a `project.json`. Nx merges the two
-files to get each project's configuration. The full [machine readable schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json) is available on GitHub.
+* 'package.json' & 'project.json'
+  * allows
+    * editing your project settings
+    * modifying an inferred task
+* 'package.json' vs 'project.json'
+  * ⚠️tasks / use executors  -- must be defined in -- 'project.json' ⚠️ 
+* Nx merges 'package.json' & 'project.json' 
+* ['nx.json' schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
+* ['project.json' schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json)
+* _Examples:_
+  * _Example1:_ create `build` and `test` targets for Nx
 
-The following configuration creates `build` and `test` targets for Nx.
-
-{% tabs %}
-{% tab label="package.json" %}
-
-```jsonc {% fileName="package.json" %}
-{
-  "name": "mylib",
-  "scripts": {
-    "test": "jest",
-    "build": "tsc -p tsconfig.lib.json" // the actual command here is arbitrary
-  }
-}
-```
-
-{% /tab %}
-{% tab label="project.json" %}
-
-```jsonc {% fileName="project.json" %}
-{
-  "root": "libs/mylib/",
-  "targets": {
-    "test": {
-      "executor": "@nx/jest:jest",
-      "options": {
-        /* ... */
-      }
-    },
-    "build": {
-      "executor": "@nx/js:tsc",
-      "options": {
-        /* ... */
+    {% tabs %}
+    {% tab label="package.json" %}
+    
+    ```jsonc {% fileName="package.json" %}
+    {
+      "name": "mylib",
+      "scripts": {
+        "test": "jest",
+        "build": "tsc -p tsconfig.lib.json" // the actual command here is arbitrary
       }
     }
-  }
-}
-```
+    ```
 
-{% /tab %}
-{% /tabs %}
+    {% /tab %}
+    {% tab label="project.json" %}
+    
+    ```jsonc {% fileName="project.json" %}
+    {
+      "root": "libs/mylib/",
+      "targets": {
+        "test": {
+          "executor": "@nx/jest:jest",
+          "options": {
+            /* ... */
+          }
+        },
+        "build": {
+          "executor": "@nx/js:tsc",
+          "options": {
+            /* ... */
+          }
+        }
+      }
+    }
+    ```
+    
+    {% /tab %}
+    {% /tabs %}
 
-You can invoke `nx build mylib` or `nx test mylib` without any extra configuration.
+    * NO need more configuration -- to invoke -- `nx build mylib` or `nx test mylib`
 
-Below are some more complete examples of project configuration files. For a more intuitive understanding of the roles of each option, you can highlight the options in the excerpt below that relate to different categories. Orchestration settings control the way [Nx runs tasks](/features/run-tasks). Execution settings control the actual task that is run. Caching settings control when [Nx caches a task](/features/cache-task-results) and what is actually cached.
+  * _Example2:_
 
-{% tabs %}
-{% tab label="package.json" %}
-
-```jsonc {% fileName="package.json" lineGroups={ Orchestration:[14,17,19,22,25],Execution:[4,5,6],Caching:[9,10,11,12,15,16,20,21] } %}
-{
-  "name": "mylib",
-  "scripts": {
-    "test": "jest",
-    "build": "tsc -p tsconfig.lib.json", // the actual command here is arbitrary
-    "ignored": "exit 1"
-  },
-  "nx": {
-    "namedInputs": {
-      "default": ["{projectRoot}/**/*"],
-      "production": ["!{projectRoot}/**/*.spec.tsx"]
-    },
-    "targets": {
-      "build": {
-        "inputs": ["production", "^production"],
-        "outputs": ["{workspaceRoot}/dist/libs/mylib"],
-        "dependsOn": ["^build"]
+    {% tabs %}
+    {% tab label="package.json" %}
+    
+    ```jsonc {% fileName="package.json" lineGroups={ Orchestration:[14,17,19,22,25],Execution:[4,5,6],Caching:[9,10,11,12,15,16,20,21] } %}
+    {
+      "name": "mylib",
+      "scripts": {
+        "test": "jest",
+        "build": "tsc -p tsconfig.lib.json", // the actual command here is arbitrary
+        "ignored": "exit 1"
       },
-      "test": {
-        "inputs": ["default", "^production"],
-        "outputs": [],
-        "dependsOn": ["build"]
+      "nx": {
+        "namedInputs": {
+          "default": ["{projectRoot}/**/*"],
+          "production": ["!{projectRoot}/**/*.spec.tsx"]
+        },
+        "targets": {
+          "build": {
+            "inputs": ["production", "^production"],
+            "outputs": ["{workspaceRoot}/dist/libs/mylib"],
+            "dependsOn": ["^build"]
+          },
+          "test": {
+            "inputs": ["default", "^production"],
+            "outputs": [],
+            "dependsOn": ["build"]
+          }
+        },
+        "includedScripts": ["test", "build"] // If you want to limit the scripts Nx sees, you can specify a list here.
       }
-    },
-    "includedScripts": ["test", "build"] // If you want to limit the scripts Nx sees, you can specify a list here.
-  }
-}
-```
-
-{% /tab %}
-{% tab label="project.json" %}
-
-```json {% fileName="project.json" lineGroups={ "Orchestration": [5,6,12,15,19,22], "Execution": [12,16,17,19,22,23], "Caching": [7,8,9,10,13,14,20,21] } %}
-{
-  "root": "libs/mylib/",
-  "sourceRoot": "libs/mylib/src",
-  "projectType": "library",
-  "tags": ["scope:myteam"],
-  "implicitDependencies": ["anotherlib"],
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*"],
-    "production": ["!{projectRoot}/**/*.spec.tsx"]
-  },
-  "targets": {
-    "test": {
-      "inputs": ["default", "^production"],
-      "outputs": [],
-      "dependsOn": ["build"],
-      "executor": "@nx/jest:jest",
-      "options": {}
-    },
-    "build": {
-      "inputs": ["production", "^production"],
-      "outputs": ["{workspaceRoot}/dist/libs/mylib"],
-      "dependsOn": ["^build"],
-      "executor": "@nx/js:tsc",
-      "options": {}
     }
-  }
-}
-```
-
-{% /tab %}
-{% /tabs %}
+    ```
+    
+    {% /tab %}
+    {% tab label="project.json" %}
+    
+    ```json {% fileName="project.json" lineGroups={ "Orchestration": [5,6,12,15,19,22], "Execution": [12,16,17,19,22,23], "Caching": [7,8,9,10,13,14,20,21] } %}
+    {
+      "root": "libs/mylib/",    // TODO: Where does it come from?
+      "sourceRoot": "libs/mylib/src", // TODO: Where does it come from?
+      "projectType": "library",
+      "tags": ["scope:myteam"],
+      "implicitDependencies": ["anotherlib"],
+      "namedInputs": {
+        "default": ["{projectRoot}/**/*"],
+        "production": ["!{projectRoot}/**/*.spec.tsx"]
+      },
+      "targets": {
+        "test": {
+          "inputs": ["default", "^production"],
+          "outputs": [],
+          "dependsOn": ["build"],
+          "executor": "@nx/jest:jest",
+          "options": {}
+        },
+        "build": {
+          "inputs": ["production", "^production"],
+          "outputs": ["{workspaceRoot}/dist/libs/mylib"],
+          "dependsOn": ["^build"],
+          "executor": "@nx/js:tsc",
+          "options": {}
+        }
+      }
+    }
+    ```
+    
+    {% /tab %}
+    {% /tabs %}
 
 ## Task Definitions (Targets)
 
-A large portion of project configuration is related to defining the tasks for the project. In addition, to defining what the task actually does, a task definition also has properties that define the way that Nx should run that task. Those properties are described in detail below.
+* large portion of project configuration 
+* define
+  * what task actually does
+  * properties / define -- the way that -- Nx should run that task
 
 ### Cache
-
+* TODO:
 In Nx 17 and higher, caching is configured by specifying `"cache": true` in a target's configuration. This will tell Nx that it's ok to cache the results of a given target. For instance, if you have a target that runs tests, you can specify `"cache": true` in the target default configuration for `test` and Nx will cache the results of running tests.
 
 ```json {% fileName="project.json" %}
@@ -202,9 +212,12 @@ If you are using distributed task execution and disable caching for a given targ
 
 ### Inputs and Named Inputs
 
-Each cacheable task needs to define `inputs` which determine whether the task outputs can be retrieved from the cache or the task needs to be re-run. The `namedInputs` defined in `nx.json` or project level configuration are sets of reusable input definitions.
-
-A typical set of inputs may look like this:
+* uses
+  * cacheable task
+* places to define it
+  * 'project.json' `namedInputs`
+  * 'nx.json' `namedInputs`
+* _Example:_
 
 ```jsonc {% fileName="" %}
 {
@@ -224,8 +237,8 @@ A typical set of inputs may look like this:
 ```
 
 {% cards %}
-{% card title="Inputs and Named Inputs Reference" type="documentation" description="Learn about all the possible settings for `inputs` and `namedInputs`" url="/reference/inputs" /%}
-{% card title="Configure Inputs for Task Caching" type="documentation" description="This recipes walks you through a few examples of how to configure `inputs` and `namedInputs`" url="/recipes/running-tasks/configure-inputs" /%}
+    {% card title="Inputs and Named Inputs Reference" type="documentation" description="Learn about all the possible settings for `inputs` and `namedInputs`" url="/reference/inputs" /%}
+    {% card title="Configure Inputs for Task Caching" type="documentation" description="This recipes walks you through a few examples of how to configure `inputs` and `namedInputs`" url="/recipes/running-tasks/configure-inputs" /%}
 {% /cards %}
 
 ### Outputs
