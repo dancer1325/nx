@@ -1,157 +1,174 @@
 # nx.json
 
-The `nx.json` file configures the Nx CLI and project defaults. The full [machine readable schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json) is available on GitHub.
+* allows
+  * configuring
+    * Nx CLI
+    * project defaults
+* [`nx.json` schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
 
-The following is an expanded example showing all options. Your `nx.json` will likely be much shorter.
+* _Example:_
 
-```json {% fileName="nx.json" %}
-{
-  "plugins": [
+    ```json {% fileName="nx.json" %}
     {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    }
-  ],
-  "parallel": 4,
-  "cacheDirectory": "tmp/my-nx-cache",
-  "defaultBase": "main",
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*"],
-    "production": ["!{projectRoot}/**/*.spec.tsx"]
-  },
-  "targetDefaults": {
-    "@nx/js:tsc": {
-      "inputs": ["production", "^production"],
-      "dependsOn": ["^build"],
-      "options": {
-        "main": "{projectRoot}/src/index.ts"
+      "plugins": [
+        {
+          "plugin": "@nx/eslint/plugin",
+          "options": {
+            "targetName": "lint"
+          }
+        }
+      ],
+      "parallel": 4,
+      "cacheDirectory": "tmp/my-nx-cache",
+      "defaultBase": "main",
+      "namedInputs": {
+        "default": ["{projectRoot}/**/*"],
+        "production": ["!{projectRoot}/**/*.spec.tsx"]
       },
-      "cache": true
-    },
-    "test": {
-      "cache": true,
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "executor": "@nx/jest:jest"
-    }
-  },
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "currentVersionResolver": "git-tag",
-        "specifierSource": "conventional-commits"
-      }
-    },
-    "changelog": {
-      "git": {
-        "commit": true,
-        "tag": true
+      "targetDefaults": {
+        "@nx/js:tsc": {
+          "inputs": ["production", "^production"],
+          "dependsOn": ["^build"],
+          "options": {
+            "main": "{projectRoot}/src/index.ts"
+          },
+          "cache": true
+        },
+        "test": {
+          "cache": true,
+          "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+          "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+          "executor": "@nx/jest:jest"
+        }
       },
-      "workspaceChangelog": {
-        "createRelease": "github"
+      "release": {
+        "version": {
+          "generatorOptions": {
+            "currentVersionResolver": "git-tag",
+            "specifierSource": "conventional-commits"
+          }
+        },
+        "changelog": {
+          "git": {
+            "commit": true,
+            "tag": true
+          },
+          "workspaceChangelog": {
+            "createRelease": "github"
+          },
+          "projectChangelogs": true
+        }
       },
-      "projectChangelogs": true
+      "generators": {
+        "@nx/js:library": {
+          "buildable": true
+        }
+      },
+      "extends": "nx/presets/npm.json"
     }
-  },
-  "generators": {
-    "@nx/js:library": {
-      "buildable": true
-    }
-  },
-  "extends": "nx/presets/npm.json"
-}
-```
+    ```
 
 ## Plugins
 
-Nx plugins improve the experience of using different tools with Nx. One key feature of plugins is that they can [automatically configure the way Nx runs tasks](/concepts/inferred-tasks) for a tool based on that tool's configuration. In order for a plugin to configure tasks for Nx, it needs to be registered in the `plugins` array. If a plugin has no options, it can be listed as a string. Otherwise, it should be listed as an object with a `plugin` property and an `options` property.
+* -- depends specifically on -- each plugin
+* allows
+  * using different tools with Nx
+* [way Nx runs tasks](/concepts/inferred-tasks) / tool, -- based on -- that tool's configuration
+* If a plugin has no options, it can be listed as a string.
+* way to specify
+  * String
+  * Object
+    * `.include` OR `.exclude`
+      * specify config files / -- used to infer -- task / project
+* [available plugins | plugin registry](/plugin-registry)
+* [create yout own Nx plugin](/extending-nx/intro/getting-started)
+* _Example1:_
 
-Every plugin behaves differently, so consult the plugin's own documentation for information about what it does. You can browse the [plugin registry](/plugin-registry) for available plugins.
-
-To learn about creating your own plugin read about [extending Nx](/extending-nx/intro/getting-started).
-
-```json {% fileName="nx.json" %}
-{
-  "plugins": [
-    "@my-org/graph-plugin",
+    ```json {% fileName="nx.json" %}
     {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
+      "plugins": [
+        "@my-org/graph-plugin",
+        {
+          "plugin": "@nx/eslint/plugin",
+          "options": {
+            "targetName": "lint"
+          }
+        }
+      ]
     }
-  ]
-}
-```
+    ```
 
-### Scope Plugins to Specific Projects
+* _Example2:_ scope Plugins -- to -- specify projects
 
-Plugins use config files to infer tasks for projects. You can specify which config files are processed by Nx plugins using the `include` and `exclude` properties in the plugin configuration object.
-
-```jsonc {% fileName="nx.json" %}
-{
-  "plugins": [
+    ```jsonc {% fileName="nx.json" %}
     {
-      "plugin": "@nx/jest/plugin",
-      "include": ["packages/**/*"], // include any projects in the packages folder
-      "exclude": ["**/*-e2e/**/*"] // exclude any projects in a *-e2e folder
+      "plugins": [
+        {
+          "plugin": "@nx/jest/plugin",
+          "include": ["packages/**/*"], // include any projects in the packages folder
+          "exclude": ["**/*-e2e/**/*"] // exclude any projects in a *-e2e folder
+        }
+      ]
     }
-  ]
-}
-```
-
-The `include` and `exclude` properties are each file glob patterns that are used to include or exclude the configuration file that the plugin is interpreting. In the example provided, the `@nx/jest/plugin` plugin will only infer tasks for projects where the `jest.config.ts` file path matches the `packages/**/*` glob but does not match the `**/*-e2e/**/*` glob.
+    ```
 
 ## Task Options
 
-The following properties affect the way Nx runs tasks and can be set at the root of `nx.json`.
+* -- affect the -- way Nx runs tasks
+* official built-in supported one
+  * `nx/tasks-runners/default`
+  * `nx-cloud`
+* can be set | root of `nx.json`
 
-| Property                | Description                                                                                                                                                                                                                                                                                                                             |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| parallel                | defines the max number of targets run in parallel                                                                                                                                                                                                                                                                                       |
-| captureStderr           | defines whether the cache captures stderr or just stdout                                                                                                                                                                                                                                                                                |
-| skipNxCache             | defines whether the Nx Cache should be skipped (defaults to `false`)                                                                                                                                                                                                                                                                    |
-| cacheDirectory          | defines where the local cache is stored (defaults to `.nx/cache`)                                                                                                                                                                                                                                                                       |
-| encryptionKey           | (when using `"nx-cloud"` only) defines an encryption key to support end-to-end encryption of your cloud cache. You may also provide an environment variable with the key `NX_CLOUD_ENCRYPTION_KEY` that contains an encryption key as its value. The Nx Cloud task runner normalizes the key length, so any length of key is acceptable |
-| selectivelyHashTsConfig | only hash the path mapping of the active project in the `tsconfig.base.json` (e.g., adding/removing projects doesn't affect the hash of existing projects) (defaults to `false`)                                                                                                                                                        |
+| Property                | Description                                                                                                                                                                                                                                                                                          |
+| ----------------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| parallel                | max # of targets / run in parallel                                                                                                                                                                                                                                                                   |
+| captureStderr           | cache captures stderr or just stdout                                                                                                                                                                                                                                                                 |
+| skipNxCache             | Nx Cache -- should be -- skipped (defaults to `false`)                                                                                                                                                                                                                                               |
+| cacheDirectory          | directory / local cache is stored (defaults to `.nx/cache`)                                                                                                                                                                                                                                          |
+| encryptionKey           | requirements: `"nx-cloud"` <br/> encryption key -- for supporting -- end-to-end encryption of your cloud cache <br/> optional `NX_CLOUD_ENCRYPTION_KEY` / contains  encryption key -- as its -- value <br/> Nx Cloud task runner -- normalizes the -- key length ->  ANY length of key is acceptable |
+| selectivelyHashTsConfig | ONLY hash the path mapping of the active project in the `tsconfig.base.json` <br/> _Example:_ adding/removing projects does NOT affect the hash of existing projects <br/> defaults to `false`                                                                                                       |
 
-You can configure `parallel` in `nx.json`, but you can also set a `--parallel` flag in the terminal `nx run-many -t test --parallel=5`.
+* way to pass
+  * | `nx.json`
+    * _Example:_ `parallel` in `nx.json`
+  * | NX CLI flags
+    * _Example:_ `--parallel` -- as -- `nx run-many -t test --parallel=5`
 
 ### Multiple Tasks Runners
 
-Tasks runners are invoked when you run `nx test`, `nx build`, `nx run-many`, `nx affected`, and so on.
+* `nx taskRunner --runner=taskRunner` 
+  * way to invoke a Tasks runner
+  * _Example:_ `nx test --runner=taskRunner`, `nx build --runner=taskRunner`, `nx run-many --runner=taskRunner`, `nx affected--runner=taskRunner`
+* `default`
+  * built-in taskRunnerThere / defined | root of `nx.json` 
+* way to register another tasks runner
+  * adding it | `nx.json`
+    * _Example:_
 
-There is a tasks runner created from the task options defined at the root of `nx.json` named `default`. You can register another tasks runner by adding it to `nx.json` like this:
+        ```json {% fileName="nx.json" %}
+        {
+          "tasksRunnerOptions": {
+            "another": {
+              "runner": "nx/tasks-runners/default",
+              "options": {}
+            }
+          }
+        }
+        ```
+  * -> you can run the task -- via -- `--runner`
+    * _Example:_ `nx run-many -t build --runner=another`
 
-```json {% fileName="nx.json" %}
-{
-  "tasksRunnerOptions": {
-    "another": {
-      "runner": "nx/tasks-runners/default",
-      "options": {}
-    }
-  }
-}
-```
+## Default Base -- `defaultBase` -- 
 
-Then you can run a task with the new runner using the `--runner` flag:
-
-```shell
-nx run-many -t build --runner=another
-```
-
-The official types of `runner` supported by Nx are `"nx/tasks-runners/default"` and `"nx-cloud"`.
-
-## Default Base
-
-Tells Nx which base branch to use when calculating affected projects.
-
-- `defaultBase` defines the default base branch, defaults to `main`.
+* := base branch
+  * `main` as default
+* uses
+  * 👁️ calculate affected projects 👁️
 
 ## Target Defaults
 
+* TODO:
 Target defaults provide ways to set common options for a particular target in your workspace. When building your project's configuration, we merge it with up to 1 default from this map. For a given target, we look at its name and its executor. We then check target defaults looking for a configuration whose key matches any of the following:
 
 - `` `${executor}` ``

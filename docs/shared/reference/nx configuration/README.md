@@ -1,18 +1,6 @@
-* allows
-  * configuring
-    * Nx CLI
-    * project defaults
 * [`nx.json` schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
   * TODO: Where it's specified `extends` property?
-  * `"plugins"`
-    * it's configuration -- depends specifically on -- each plugin
-    * `.include` OR `.exclude` specify config files / -- used to infer -- task / project 
-      * **Note:** Check '../concepts/inferTasksOrProjectCrystal'
-  * task options 
-    * ⚠️ at the root of 'nx.json' == `default` taskRun ⚠️ 
-      * official supported one
-        * `nx/tasks-runners/default`
-        * `nx-cloud`
+  * task options
     * `parallel`
       * alternative to command's argument `--parallel`
     * `captureStderr`
@@ -29,11 +17,6 @@
         * ⚠️registering other task runners ⚠️
       * `nx targetName projectName --runner=taskRunnerDefined`
         * way to invoke it
-  * `defaultBase`
-    * := base branch 
-      * "main" branch  -- by default --
-      * uses
-        * 👁️ calculate affected projects 👁️
   * `namedInputs`
     * TODO:
   * `targetDefaults`
