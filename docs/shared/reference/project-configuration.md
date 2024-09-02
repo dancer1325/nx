@@ -594,24 +594,10 @@ configuration above.
 
 ### Executor/command options
 
-To define what a task does, you must configure which command or executor will run when the task is executed. In the case of [inferred tasks](/concepts/inferred-tasks) you can provide project-specific overrides. As an example, if your repo has projects with a `build` inferred target running the `vite build` command, you can provide some extra options as follows:
-
-```json
-{
-  "targets": {
-    "build": {
-      "options": {
-        "assetsInlineLimit": 2048,
-        "assetsDir": "static/assets"
-      }
-    }
-  }
-}
-```
-
-For more details on how to pass args to the underlying command see the [Pass Args to Commands recipe](/recipes/running-tasks/pass-args-to-commands).
-
-In the case of an explicit target using an executor, you can specify the executor and the options specific to that executor as follows:
+* command or executor / task
+* == what a task does 
+* `targets.targetName.options`
+  * _Example1:_ explicit target
 
 ```json
 {
@@ -625,9 +611,25 @@ In the case of an explicit target using an executor, you can specify the executo
   }
 }
 ```
+  * if [inferred tasks](/concepts/inferred-tasks) -> override project-specific configuration
+    * [Pass Args to Commands recipe](/recipes/running-tasks/pass-args-to-commands)
+    * _Example1:_ `build` inferred target / run `vite build` command & provide extra options
+
+```json
+{
+  "targets": {
+    "build": {
+      "options": {    
+        "assetsInlineLimit": 2048,
+        "assetsDir": "static/assets"
+      }
+    }
+  }
+}
+```
 
 ## Project Metadata
-
+* TODO:
 The following properties describe the project as a whole.
 
 ### tags
