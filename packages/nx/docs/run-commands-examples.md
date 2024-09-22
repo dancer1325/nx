@@ -104,16 +104,9 @@ nx run frontend:ls-project-root
 {% /tab %}
 {% tab label="Arguments forwarding" %}
 
-* TODO:
-When interpolation is not present in the command, all arguments are forwarded to the command by default.
-
-This is useful when you need to pass raw argument strings to your command.
-
-For example, when you run:
-
-```bash
-nx run frontend:webpack --args="--config=example.config.js"
-```
+* 👁️ if interpolation is NOT | `command` -> ALL arguments are forwarded to the command by default 👁️
+  * uses
+    * pass raw argument strings | your command
 
 ```json
 "webpack": {
@@ -124,28 +117,32 @@ nx run frontend:webpack --args="--config=example.config.js"
 }
 ```
 
-The above command will execute: `webpack --config=example.config.js`
+```bash
+nx run frontend:webpack --args="--config=example.config.js"
 
-This functionality can be disabled by using `commands` and expanding each `command` into an object
-that sets the `forwardAllArgs` option to `false` as shown below:
-
-```json
-"webpack": {
-    "executor": "nx:run-commands",
-    "options": {
-        "commands": [
-            {
-                "command": "webpack",
-                "forwardAllArgs": false
-            }
-        ]
-    }
-}
+# ==    `webpack --config=example.config.js`  
 ```
+
+  * if you want to disable it -> use `commands.[*].forwardAllArgs=false` / `command`
+
+    ```json
+    "webpack": {
+        "executor": "nx:run-commands",
+        "options": {
+            "commands": [
+                {
+                    "command": "webpack",
+                    "forwardAllArgs": false
+                }
+            ]
+        }
+    }
+    ```
 
 {% /tab %}
 {% tab label="Shorthand" %}
-When you only need to run a single command, you can use a shorthand for nx:run-commands:
+
+* if you only need to run 1 command -> use a shorthand for `nx:run-commands`
 
 ```json
 "webpack": {
@@ -156,7 +153,11 @@ When you only need to run a single command, you can use a shorthand for nx:run-c
 {% /tab %}
 {% tab label="Custom done conditions" %}
 
-Normally, `run-commands` considers the commands done when all of them have finished running. If you don't need to wait until they're all done, you can set a special string that considers the commands finished the moment the string appears in `stdout` or `stderr`:
+* ways that `run-commands` considers the commands done
+  * ALL commands have finished running
+  * if you do NOT need to wait until they're all done -> set a special string / appears `stdout` or `stderr`
+
+* _Example:_ 
 
 ```json
 "finish-when-ready": {
@@ -164,9 +165,9 @@ Normally, `run-commands` considers the commands done when all of them have finis
     "options": {
         "commands": [
             "sleep 5 && echo 'FINISHED'",
-            "echo 'READY'"
+            "echo 'READY'"    // stdout the special string
         ],
-        "readyWhen": "READY",
+        "readyWhen": "READY",     // "READY" is here the string, BUT any could be set
         "parallel": true
     }
 }
@@ -174,9 +175,11 @@ Normally, `run-commands` considers the commands done when all of them have finis
 
 ```bash
 nx run frontend:finish-when-ready
+
+# command finish immediately, WITHOUT waiting for 5"
 ```
 
-The above commands will finish immediately, instead of waiting for 5 seconds.
+* TODO:
 
 When we have multiple commands running in parallel, there is a possibility that we want to wait for more than 1 string to appear in stdout or stderr.
 For example, imagine a case where we are running multiple commands to start multiple dev servers in parallel.
@@ -204,6 +207,7 @@ The above commands will finish as soon as both the 1st and the 2nd command echoe
 {% /tab %}
 {% tab label="Nx Affected" %}
 
+* TODO:
 The true power of `run-commands` comes from the fact that it runs through `nx`, which knows about your project graph. So you can run **custom commands** only for the projects that have been affected by a change.
 
 We can create some configurations to generate docs, and if run using `nx affected`, it will only generate documentation for the projects that have been changed:
