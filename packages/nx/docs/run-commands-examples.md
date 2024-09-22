@@ -1,6 +1,7 @@
-`project.json`:
+* `command`
+  * option / 1! command
 
-```json
+```json title="project.json"
 {
   // ...
   "targets": {
@@ -24,8 +25,12 @@ nx run frontend:ls-project-root
 {% tabs %}
 {% tab label="Chaining commands" %}
 
-The `commands` option accepts as many commands as you want. By default, they all run in parallel.
-You can run them sequentially by setting `parallel: false`:
+* `commands`
+  * option / accepts ANY number of commands
+* `parallel`
+  * concurrency to run the commands
+  * by default, `true`
+  * if you want to run commands sequentially -> set `parallel: false`
 
 ```json
 "create-script": {
@@ -44,13 +49,14 @@ You can run them sequentially by setting `parallel: false`:
 {% /tab %}
 {% tab label="Setting the cwd" %}
 
-By setting the `cwd` option, each command will run in the `apps/frontend` folder.
+* `cwd`
+  * option / indicate the path | ALL commands will run
 
 ```json
 "create-script": {
     "executor": "nx:run-commands",
     "options": {
-        "cwd": "apps/frontend",
+        "cwd": "apps/frontend",   // ALL comands will run on this path
         "commands": [
           "mkdir -p scripts",
           "touch scripts/my-script.sh",
@@ -64,7 +70,8 @@ By setting the `cwd` option, each command will run in the `apps/frontend` folder
 {% /tab %}
 {% tab label="Interpolating Args" %}
 
-You can use custom arguments in your scripts with `{args.[someFlag]}`:
+* `{args.[someFlag]}`
+  * == custom arguments | your scripts
 
 ```json
 "create-script": {
@@ -81,20 +88,23 @@ You can use custom arguments in your scripts with `{args.[someFlag]}`:
 }
 ```
 
-We run the above with:
+* ways to run for passing the arguments
+  * 
+    ```bash
+    nx run frontend:create-script --args="--name=example"
+    ```
 
-```bash
-nx run frontend:create-script --args="--name=example"
-```
+    or
 
-or simply with:
-
-```bash
-nx run frontend:create-script --name=example
-```
+  *  
+    ```bash
+    nx run frontend:create-script --name=example
+    ```
 
 {% /tab %}
 {% tab label="Arguments forwarding" %}
+
+* TODO:
 When interpolation is not present in the command, all arguments are forwarded to the command by default.
 
 This is useful when you need to pass raw argument strings to your command.
