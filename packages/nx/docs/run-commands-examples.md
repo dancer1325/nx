@@ -155,9 +155,9 @@ nx run frontend:webpack --args="--config=example.config.js"
 
 * ways that `run-commands` considers the commands done
   * ALL commands have finished running
-  * if you do NOT need to wait until they're all done -> set a special string / appears `stdout` or `stderr`
+  * if you do NOT need to wait until they're all done -> set `"readyWhen": ["SomeString1", "SomeString2", ...]` / `"SomeString1"` & `"SomeString2"` appears in `stdout` or `stderr`
 
-* _Example:_ 
+* _Example1:_ 
 
 ```json
 "finish-when-ready": {
@@ -179,10 +179,7 @@ nx run frontend:finish-when-ready
 # command finish immediately, WITHOUT waiting for 5"
 ```
 
-* TODO:
-
-When we have multiple commands running in parallel, there is a possibility that we want to wait for more than 1 string to appear in stdout or stderr.
-For example, imagine a case where we are running multiple commands to start multiple dev servers in parallel.
+* _Example2:_ >1 commands / running in parallel
 
 ```json
 "finish-when-multiple-ready": {
@@ -200,20 +197,23 @@ For example, imagine a case where we are running multiple commands to start mult
 
 ```bash
 nx run frontend:finish-when-multiple-ready
+
+# command finish as soon as both the 1st and the 2nd command echoed "READY" (between 1 and 10 seconds), instead of waiting for the extra hour
 ```
 
-The above commands will finish as soon as both the 1st and the 2nd command echoed "READY" (between 1 and 10 seconds), instead of waiting for the extra hour.
 
 {% /tab %}
 {% tab label="Nx Affected" %}
 
-* TODO:
-The true power of `run-commands` comes from the fact that it runs through `nx`, which knows about your project graph. So you can run **custom commands** only for the projects that have been affected by a change.
+* `run-commands` allows running 👁️**custom commands** only | projects / have been affected by a change 👁️
+  * Reason: 🧠`run-commands` runs through `nx` -> knows about your project graph 🧠
 
-We can create some configurations to generate docs, and if run using `nx affected`, it will only generate documentation for the projects that have been changed:
+* _Example:_ configurations / generate docs | ONLY projects / have been changed
 
 ```bash
 nx affected --target=generate-docs
+
+# nx affected     ->   | projects / have been changed
 ```
 
 ```json
