@@ -5,86 +5,109 @@ description: A guide on how to configure webpack on your Nx workspace, and instr
 
 # Configure Webpack in your Nx workspace
 
-You can configure Webpack using a [`webpack.config.js`](https://webpack.js.org/concepts/configuration/) file in your project. Nx infers the `build` and `serve` targets from your webpack configuration as long as you have `@nx/webpack/plugin` added to your `nx.json`.
+* steps
+  * use a [`webpack.config.js`](https://webpack.js.org/concepts/configuration/) | your project
+  * `@nx/webpack/plugin` | your `nx.json`
+    * -> Nx, from your webpack configuration, -- infers the -- `build` and `serve` targets 
 
-```json5 {% fileName="nx.json" %}
-"plugins": [
-  {
-    "plugin": "@nx/webpack/plugin",
-    "options": {
-      "buildTargetName": "build",
-      "serveTargetName": "serve"
-    }
-  }
-]
-```
+    ```json5 {% fileName="nx.json" %}
+    "plugins": [
+      {
+        "plugin": "@nx/webpack/plugin",
+        "options": {
+          "buildTargetName": "build",
+          "serveTargetName": "serve"
+        }
+      }
+    ]
+    ```
 
-If you are using the [`@nx/webpack:webpack`](/nx-api/webpack/executors/webpack) executor, the path to your webpack config is set in the `webpackConfig` option in your `project.json` file.
+* if you are using the [`@nx/webpack:webpack`](/nx-api/webpack/executors/webpack) executor -> `webpackConfig=pathToYourWebpackConfig` | your `project.json`
 
-```json5 {% fileName="project.json" highlightLines=["7"] %}
-"my-app": {
-  "targets": {
-    //...
-    "build": {
-      "executor": "@nx/webpack:webpack",
-      "options": {
-        "webpackConfig": "apps/my-app/webpack.config.js",
+    ```json5 {% fileName="project.json" highlightLines=["7"] %}
+    "my-app": {
+      "targets": {
         //...
-      },
-      // ...
-    },
-  }
-}
-```
+        "build": {
+          "executor": "@nx/webpack:webpack",
+          "options": {
+            "webpackConfig": "apps/my-app/webpack.config.js",
+            //...
+          },
+          // ...
+        },
+      }
+    }
+    ```
 
-In the webpack config file, you can add the necessary configuration for Webpack. Read more on how to configure Webpack in the [Webpack documentation](https://webpack.js.org/concepts/configuration/).
+* check [Webpack documentation](https://webpack.js.org/concepts/configuration/)
 
 ## Basic and Nx-enhanced configuration files
 
-Nx supports two flavors of Webpack configuration files:
-
-1. [_Basic_](#basic-configuration-for-nx) (or standard) Webpack configuration. The file exports a Webpack config object, or one of the [standard configuration types](https://webpack.js.org/configuration/configuration-types).
-2. [_Nx-enhanced_](#nxenhanced-configuration-with-composable-plugins) Webpack configuration. The file exports a function that takes in a Webpack configuration object, plus the [`@nx/webpack:webpack`](/nx-api/webpack/executors/webpack) options and context, and returns an updated Webpack configuration object.
-
-The basic configuration works with Webpack CLI, whereas the Nx-enhanced configuration requires the use of the `@nx/webpack:webpack` executor.
+* 👁️Nx supports 2 flavors of Webpack configuration files 👁️
+  * [_Basic or Standard_](#basic-configuration-for-nx) Webpack configuration
+    * file exports
+      * a Webpack config object or
+      * one of the [standard configuration types](https://webpack.js.org/configuration/configuration-types)
+    * works with Webpack CLI 
+  * [_Nx-enhanced_](#nxenhanced-configuration-with-composable-plugins) Webpack configuration
+    * file
+      * exports a
+        * function / takes in a Webpack configuration object
+        * [`@nx/webpack:webpack`](/nx-api/webpack/executors/webpack) options & context
+      * returns an updated Webpack configuration object
+    * requirements
+      * `@nx/webpack:webpack` executor
 
 ### Basic configuration for Nx
 
 {% callout type="info" title="Module federation support" %}
-Currently, Nx module federation requires an enhanced Webpack configuration file an the use of the `withModuleFederation` plugin. See the next section for more details.
+* Nx module federation requires
+  * enhanced Webpack configuration file
+  * use `withModuleFederation` plugin
+
 {% /callout %}
 
-A basic Webpack configuration was introduced in Nx 18, and it looks like this:
+* from Nx v18+
+* _Example:_
 
-```js {% fileName="apps/demo/webpack.config.js" %}
-const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
-const { join } = require('path');
+    ```js {% fileName="apps/demo/webpack.config.js" %}
+    const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
+    const { join } = require('path');
+    
+    module.exports = {
+      output: {
+        path: join(__dirname, '../../dist/apps/demo'),
+      },
+      devServer: {
+        port: 4200,
+      },
+      plugins: [
+        new NxAppWebpackPlugin({
+          main: './src/main.ts',
+          tsConfig: './tsconfig.app.json',
+          index: './src/index.html',
+          styles: ['./src/styles.css'],
+          outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
+          optimization: process.env['NODE_ENV'] === 'production',
+        }),
+      ],
+    };
+    ```
 
-module.exports = {
-  output: {
-    path: join(__dirname, '../../dist/apps/demo'),
-  },
-  devServer: {
-    port: 4200,
-  },
-  plugins: [
-    new NxAppWebpackPlugin({
-      main: './src/main.ts',
-      tsConfig: './tsconfig.app.json',
-      index: './src/index.html',
-      styles: ['./src/styles.css'],
-      outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
-      optimization: process.env['NODE_ENV'] === 'production',
-    }),
-  ],
-};
-```
-
-The [`NxWebpackPlugin`](/recipes/webpack/webpack-plugins#nxwebpackplugin) plugin takes a `main` entry file and produces a bundle in the output directory as defined in `output.path`. You can also pass the `index` option if it is a webapp, which will handle outputting scripts and stylesheets in the output file. Note that `NxWebpackPlugin` is optional, and you can bring your own Webpack configuration without using it or any plugins from `@nx/webpack`.
-
-For more information, see the [Webpack plugins guide](/recipes/webpack/webpack-plugins).
+* [`NxWebpackPlugin`](/recipes/webpack/webpack-plugins#nxwebpackplugin) plugin
+  * from a `main` entry file -- produces a -- bundle | output directory -- as defined in -- `output.path` 
+  * `index` option
+    * uses
+      * | webapp
+    * handle outputting scripts & stylesheets | output file
+  * optional
+    * Reason: 🧠 you can bring your OWN Webpack configuration / != built-in plugins from `@nx/webpack` 🧠
+* check [Webpack plugins guide](/recipes/webpack/webpack-plugins)
 
 ### Nx-enhanced configuration with composable plugins
+
+* TODO: 
 
 {% callout type="info" title="Non-standard webpack config" %}
 Nx-enhanced configuration, via `composePlugins` and [`withNx`](/recipes/webpack/webpack-plugins#withnx) functions, requires the usage of `@nx/webpack:webpack` executor in your `project.json` file. This flavor of configuration do not work with the Webpack CLI.
