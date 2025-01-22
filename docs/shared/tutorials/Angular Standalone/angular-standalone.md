@@ -1,36 +1,31 @@
 # Building Angular Apps with the Nx Standalone Projects Setup
 
-In this tutorial you'll learn how to use Angular with Nx in a ["standalone" (non-monorepo) setup](/concepts/integrated-vs-package-based#standalone-applications). Not to be confused with the "Angular Standalone API", a standalone project in Nx is a non-monorepo setup where you have a single application at the root level. This setup is very similar to what the Angular CLI gives you.
+* goal
+  * how to
+    * use Angular with Nx | ["standalone" (non-monorepo) setup](/concepts/integrated-vs-package-based#standalone-applications) 
+      * ⚠️!= "Angular Standalone API" ⚠️
+      * Nx's standalone project
+        * 👀== non-monorepo setup / 1! application | root level 👀
+          * == set up -- built via -- Angular CLI
+    * run 
+      * 1! task (i.e. serve your app) or
+      * MULTIPLE tasks in parallel
+    * leverage code generators -- to scaffold -- components
+    * modularize your codebase
+    * impose architectural constraints / better maintainability
 
-What are you going to learn?
+* requirements
+  * see [Angular monorepo tutorial](../Angular%20Monorepo) 
 
-- how to create a new standalone (single-project) Nx workspace setup for Angular
-- how to run a single task (i.e. serve your app) or run multiple tasks in parallel
-- how to leverage code generators to scaffold components
-- how to modularize your codebase and impose architectural constraints for better maintainability
-
-{% callout type="info" title="Looking for Angular monorepos?" %}
-Note, this tutorial sets up a repo with a single application at the root level that breaks out its code into libraries to add structure. If you are looking for an Angular monorepo setup then check out our [Angular monorepo tutorial](/getting-started/tutorials/angular-monorepo-tutorial).
-
-{% /callout %}
+* [Youtube video](https://www.youtube.com/embed/ZAO0yXupIIE)
 
 ## Final Code
 
-Here's the source code of the final result for this tutorial.
-
-{% github-repository url="https://github.com/nrwl/nx-recipes/tree/main/angular-standalone" /%}
-
-<!-- {% stackblitz-button url="github.com/nrwl/nx-recipes/tree/main/angular-standalone?file=README.md" /%} -->
-
-Also, if you prefer learning with a video, join Juri and walk through the tutorial, step by step together.
-
-{% youtube
-src="https://www.youtube.com/embed/ZAO0yXupIIE"
-title="Tutorial: Standalone Angular Application"
-/%}
+* [source code](https://github.com/nrwl/nx-recipes/tree/main/angular-standalone)
 
 ## Creating a new Angular App
 
+* TODO:
 {% video-link link="https://youtu.be/ZAO0yXupIIE?t=49" /%}
 
 Create a new Angular application with the following command:
