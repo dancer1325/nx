@@ -6,12 +6,11 @@ description:
   - Run migrations (e.g., nx migrate --run-migrations=migrations.json). Use flag --if-exists to run migrations only if the migrations file exists.'
 ---
 
-# migrate
+# migrate -- `nx migrate` --
 
-Creates a migrations file or runs migrations from the migrations file.
-
-- Migrate packages and create migrations.json (e.g., nx migrate @nx/workspace@latest)
-- Run migrations (e.g., nx migrate --run-migrations=migrations.json). Use flag --if-exists to run migrations only if the migrations file exists.
+* allows
+  * creating a migrations file ("migrations.json") or
+  * from migrations file -- runs -- migrations
 
 ## Usage
 
@@ -19,22 +18,17 @@ Creates a migrations file or runs migrations from the migrations file.
 nx migrate [packageAndVersion]
 ```
 
-Install `nx` globally to invoke the command directly using `nx`, or use `npx nx`, `yarn nx`, or `pnpm nx`.
+* ways to run
+  * if you install `nx` globally
+  * use `npx nx` / `yarn nx` / `pnpm nx`
 
 ### Examples
 
-Update all Nx plugins to "latest". This will generate migrations.json:
-
-```shell
- nx migrate latest
-```
-
-Update all Nx plugins to "9.0.0". This will generate migrations.json:
-
-```shell
- nx migrate 9.0.0
-```
-
+* _Example1:_ `nx migrate latest`
+  * ALL Nx plugins -- are upgraded to -- "latest"
+* _Example2:_ `nx migrate 9.0.0`
+  * ALL Nx plugins -- are upgraded to -- "9.0.0"
+* TODO:
 Update @nx/workspace and generate the list of migrations starting with version 8.0.0 of @nx/workspace and @nx/node, regardless of what is installed locally:
 
 ```shell
@@ -121,7 +115,9 @@ Type: `boolean`
 
 Default: `false`
 
-Run migrations only if the migrations file exists, if not continues successfully
+* if the migrations file exists -> run migrations
+* else -> continues successfully
+* `--if-exists` tag
 
 ### interactive
 
