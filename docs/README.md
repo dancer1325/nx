@@ -2,20 +2,21 @@
 
 ## Structure of the Documentation
 
-When writing documentation, it is important to know the audience you are writing for and what kind of document you are writing. We try to follow the framework listed below, but there are always some exceptions since the documentation is always changing. This framework is valuable to keep in mind, but we also follow the principle that if a PR is better than the existing content on the site, we'll merge it in and follow up to make it better later if it doesn't perfectly match the standards.
-
 ### Types of Documents
 
-We are generally following the [Diataxis](https://diataxis.fr) model where documents are divided into tutorials, concept guides, recipes and reference.
-
-- Tutorial - Focused on explaining a concept through step by step instructions.
-- Concept guide - Explains why something works the way it does or how to think about something.
-- Recipe - Focused directions to accomplish a specific task. Describes how to do something.
-- Reference - Lists what you can do with the tool (i.e. API docs).
+* 👀follow [Diataxis](https://diataxis.fr) model 👀
+  * == EXISTING sections
+    * tutorials,
+      * == step by step instructions
+    * concept guides,
+    * recipes
+      * == how to do something
+        * == / SPECIFIC task
+    * reference
+      * == what you can do -- via the -- tool
+        * _Example:_ API docs
 
 ### Audiences
-
-We also have different audiences in mind when writing docs:
 
 👶 New user starting from scratch
 
@@ -44,15 +45,28 @@ We also have different audiences in mind when writing docs:
 
 ### Outline
 
-- Getting Started - These documents assume a new user and are generally concept guides with a lot of links to other parts of the site. There are some elements of recipes mixed in, but those should be kept to a minimum.
-- Tutorials - These are tutorials written for a new user. After completing one of these tutorials, the user should have enough knowledge to be an intermediate user.
-- Core Features - These are primarily recipes with a little concept mixed in. These documents should be short and provide the basic information that people will want 80% of the time and link to anything more complex. A new user should be able to click through these documents and skim them to get a good understanding of what Nx does without getting overwhelmed with details.
-- Concepts - These are concept guides written for a new user. Any recipe content should be split into a recipe document and linked.
-- More Concepts (or other categories under Concepts) - These are concept guides written for an intermediate user.
-- Recipes - These are recipes written for an advanced user.
-- Nx with Your Favorite Tech - These are tutorials written for an intermediate user.
-- Benchmarks - Reference documents linking to external resources.
-- Reference - Reference documents.
+* TODO:
+- Getting Started -
+  - These documents assume a new user and are generally concept guides with a lot of links to other parts of the site. 
+  - There are some elements of recipes mixed in, but those should be kept to a minimum.
+- Tutorials - 
+  - These are tutorials written for a new user. 
+  - After completing one of these tutorials, the user should have enough knowledge to be an intermediate user.
+- Core Features - 
+  - These are primarily recipes with a little concept mixed in. 
+  - These documents should be short and provide the basic information that people will want 80% of the time and link to anything more complex. 
+  - A new user should be able to click through these documents and skim them to get a good understanding of what Nx does without getting overwhelmed with details.
+- Concepts - 
+  - These are concept guides written for a new user. 
+  - Any recipe content should be split into a recipe document and linked.
+- More Concepts (or other categories under Concepts) - 
+  - These are concept guides written for an intermediate user.
+- Recipes - 
+  - These are recipes written for an advanced user.
+- Nx with Your Favorite Tech - 
+  - These are tutorials written for an intermediate user.
+  - Benchmarks - 
+    - Reference documents linking to external resources.
 
 ## Markdown syntax available
 
@@ -60,7 +74,8 @@ The default markdown syntax is supported when writing documentation.
 
 ### Front matter
 
-Front matter is used to add metadata to your Markdown file (`title` & `description`). It is provided at the very top of the file, enclosed by three dashes `---`. The content is parsed as `YAML`.
+Front matter is used to add metadata to your Markdown file (`title` & `description`). 
+It is provided at the very top of the file, enclosed by three dashes `---`. The content is parsed as `YAML`.
 
 If no Front matter is detected, the metadata will be populated with the following:
 
@@ -74,15 +89,12 @@ description: This is a custom description
 ---
 ```
 
-### Social Media Images
-
-You can specify a custom social media image for a page by specifying `mediaImage` in the `map.json` entry for that page. `mediaImage` is a path relative to `/docs`.
-
-Note that you won't see the social media image in the preview generated for your PR, because it loads from the live `nx.dev` site. You can make sure the image is correct by looking at `[preview-url]/images/open-graph/[page-url].[image-extension]`.
-
 ### Custom markdown syntax
 
-The documentation website [nx.dev](https://nx.dev) is using custom Markdown syntax to enable the authors to add functionality to its content.
+* allows
+  * adding functionality | its content
+* uses
+  * | [nx.dev](https://nx.dev) (== documentation website ) 
 
 #### Callouts
 
@@ -411,19 +423,13 @@ Embed an Nx Graph visualization that can be panned by the user.
 
 ## Publishing Process
 
-There are multiple versions of the `nx.dev` site.
-
-- [canary.nx.dev](https://canary.nx.dev) contains the documentation on the `master` branch
-- [nx.dev](https://nx.dev) contains the documentation as of the latest release of Nx to npm. The main site will not include reference documentation for APIs that have been merged to the codebase, but not yet released to the public.
-- `[version].nx.dev` contains the documentation for that version of Nx. `[version]` in this case is the major version up to the current LTS version of Nx. So [18.nx.dev](https://18.nx.dev) will show the Nx documentation as of the last released version of Nx 18.
-
-When a commit that contains documentation is merged into `master`, it will be immediately published to `canary.nx.dev`. Whenever a new release of Nx is published to npm, that documentation will then be available on the main site.
-
-### Immediately Publishing Time-Sensitive Documentation
-
-If you have a documentation change that should be published immediately, you'll need to create 2 PRs.
-
-1. First, create a PR against `master` in the normal manner.
-2. Your second PR needs to be made against the website branch with the latest major version of Nx. So your second PR can be created against `website-19` if the latest version of Nx is `19.1.0`. Once `website-19` is updated with your changes, the main `nx.dev` site will be updated.
-
-Later, when Nx `19.1.1` is released, `website-19` will be overwritten with whatever is on `master` and the first PR you created will take effect.
+* "nx.dev" site's versions
+  - [canary.nx.dev](https://canary.nx.dev)
+    - == documentation | `master` branch
+  - [nx.dev](https://nx.dev)
+    - == documentation | Nx to npm's latest release
+  - `[version].nx.dev`
+    - == documentation | SPECIFIC Nx's version
+    - `[version]`
+      - ALLOWED values == [majorVersion, CURRENT Nx LTS version]
+      - _Example:_ [18.nx.dev](https://18.nx.dev) == last released version of Nx 18
