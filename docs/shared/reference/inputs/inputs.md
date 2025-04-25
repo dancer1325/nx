@@ -1,38 +1,50 @@
 # Inputs and Named Inputs
 
-When Nx [computes the hash for a given operation](/concepts/how-caching-works), it takes into account the `inputs` of the target.
-The `inputs` are a list of **file sets**, **runtime** inputs and **environment variables** that affect the output of the target.
-If any of the `inputs` change, the cache is invalidated and the target is re-run.
+* := 👀list(fileSets, runtimeInputs, environmentVariables) / -- affected the -- target's output👀
+  * if some `input` is changed ->
+    * cache invalidated &
+    * target re-run
+* uses
+  * by Nx -- [to compute -- hash / given operation](/concepts/how-caching-works)
 
-## Types of Inputs
+## Types of Inputs | 👀compute hash / given operation 👀
 
-Nx can consider the following types of Inputs when computing the hash for a given operation.
+### Project Configuration -- 'project.json' --
 
-### Project Configuration
-
-Nx always considers the configuration of the project of a task and its dependencies when calculating the hash of a task.
+* project's configuration
+  * task +
+  * 's dependencies
 
 ### Command Arguments
 
-Passing different arguments to an Nx command will often change the behavior of a task. Nx will filter out arguments which are for Nx itself and do not have any effect on running of tasks such as `--parallel` or `--projects`.
-
-For example, running `nx build myreactapp --prod` will not reuse the cached output of running `nx build myreactapp`.
+* Command Arguments / NOT affect run tasks
+  * Reason: 🧠are for Nx itself🧠
+  * `--parallel`
+  * `--projects`
 
 ### Source Files
 
-Changing source code will often change the behavior of a task. Nx can consider the contents of files matching a pattern when calculating the computation hash.
-Source file inputs are defined like this:
+* == source files' contents
+* requirements
+  * prefix 
+    * with
+      * `{projectRoot}` OR
+      * `{workspaceRoot}` 
+    * Reason: 🧠 distinguish where the paths -- should be -- resolved from🧠
+* Reason: 🧠 if you change source files -> NORMALLY change task's behavior🧠
+* _Example:_
+    ```jsonc
+    "inputs": {
+      "{projectRoot}/**/*", // All files in a project
+      "{workspaceRoot}/.gitignore", // A specific file in the workspace
+      "{projectRoot}/**/*.ts", // A glob pattern for files
+      "!{projectRoot}/**/*.spec.ts", // Excluding files matching a glob pattern
+    }
+    ```
 
-```jsonc
-"inputs": {
-  "{projectRoot}/**/*", // All files in a project
-  "{workspaceRoot}/.gitignore", // A specific file in the workspace
-  "{projectRoot}/**/*.ts", // A glob pattern for files
-  "!{projectRoot}/**/*.spec.ts", // Excluding files matching a glob pattern
-}
-```
-
-Source file inputs must be prefixed with either `{projectRoot}` or `{workspaceRoot}` to distinguish where the paths should be resolved from. `{workspaceRoot}` should only appear in the beginning of an input but `{projectRoot}` and `{projectName}` can be specified later in the input to interpolate the root or name of the project into the input location.
+* TODO:
+ 
+`{workspaceRoot}` should only appear in the beginning of an input but `{projectRoot}` and `{projectName}` can be specified later in the input to interpolate the root or name of the project into the input location.
 
 Prefixing a source file input with `!` will exclude the files matching the pattern from the set of files used to calculate the hash.
 Prefixing a source file input with `^` means this entry applies to the project dependencies of the project, not the project itself.
@@ -44,7 +56,9 @@ To get a better idea of how to use inputs, you can browse some [common input set
 
 ### Environment Variables
 
-Tools and scripts will often use some environment variables to change their behavior. Nx can consider the value of environment variables when calculating the computation hash in order to invalidate the cache if the environment variable value changes. Environment variable inputs are defined like this:
+Tools and scripts will often use some environment variables to change their behavior. 
+Nx can consider the value of environment variables when calculating the computation hash in order to invalidate the cache if the environment variable value changes. 
+Environment variable inputs are defined like this:
 
 ```jsonc
 "inputs": [
@@ -54,7 +68,8 @@ Tools and scripts will often use some environment variables to change their beha
 
 ### Runtime Inputs
 
-You can use a Runtime input to provide a script which will output the information you want to include in the computation hash. Runtime inputs are defined like this:
+You can use a Runtime input to provide a script which will output the information you want to include in the computation hash. 
+Runtime inputs are defined like this:
 
 ```jsonc
 "inputs": [
@@ -66,9 +81,14 @@ This kind of input is often used to include versions of tools used to run the ta
 
 ### External Dependencies
 
-Source code often imports from external dependencies installed through package managers. For example, a React application will likely import `react`. It is not needed to configure those `externalDependencies` directly. Nx will always consider external dependencies depended upon by any source code within the project.
+Source code often imports from external dependencies installed through package managers. 
+For example, a React application will likely import `react`. 
+It is not needed to configure those `externalDependencies` directly. 
+Nx will always consider external dependencies depended upon by any source code within the project.
 
-External dependencies can also be tools used to run tasks. Updating the versions of those tools will change the behavior of those tasks. External dependencies inputs are defined like this:
+External dependencies can also be tools used to run tasks.
+Updating the versions of those tools will change the behavior of those tasks. 
+External dependencies inputs are defined like this:
 
 ```jsonc
 "inputs": [
@@ -110,7 +130,9 @@ Targets which use an executor from a Nx Plugin maintained by the Nx Team will ha
 
 ### Outputs of Dependent Tasks
 
-When a task depends on another task, it is possible that the outputs of the dependent task will affect the behavior of the task. The Nx caching mechanism can consider the contents of files produced by dependent tasks that match a pattern. Use outputs of dependent tasks as inputs like this:
+When a task depends on another task, it is possible that the outputs of the dependent task will affect the behavior of the task. 
+The Nx caching mechanism can consider the contents of files produced by dependent tasks that match a pattern. 
+Use outputs of dependent tasks as inputs like this:
 
 ```jsonc
 "inputs": [
@@ -121,15 +143,23 @@ When a task depends on another task, it is possible that the outputs of the depe
 
 The pattern will be matched with outputs of tasks which this task depends on. Setting `transitive` to `true` will also include outputs of all task dependencies of this task in the [task pipeline](/concepts/task-pipeline-configuration).
 
-### A subset of the root `tsconfig.json` or `tsconfig.base.json`
+### (root `tsconfig.json` or `tsconfig.base.json`)'s subset
 
-When a root `tsconfig.json` or `tsconfig.base.json` is present, Nx will always consider parts of the file which apply to the project of a task being run.
-This includes the full `compilerOptions` section and particular path mappings in the `compilerOptions.paths` property.
-This allows Nx to to not invalidate every single task when a path mapping is added or removed from the root `tsconfig.json` file
+
+* requirements
+  * root `tsconfig.json` or `tsconfig.base.json`
+
+* ==
+  * FULL `compilerOptions` section
+  * `compilerOptions.paths`' particular path mappings
+    * allows
+      * if a path mapping is added OR removed -> NOT invalidated every task
 
 ## Named Inputs
 
-Many tasks will utilize the same sets of inputs with minor differences. Nx allows you to define these sets in the `namedInputs` section of the `nx.json` file.
+* TODO:
+Many tasks will utilize the same sets of inputs with minor differences. 
+Nx allows you to define these sets in the `namedInputs` section of the `nx.json` file.
 
 These sets of inputs can then be referenced and reused in the `inputs` array of targets. You can think of these as variables which can be used in the `inputs` array.
 
