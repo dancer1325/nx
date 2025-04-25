@@ -7,7 +7,6 @@
 * [`nx.json` schema](https://github.com/nrwl/nx/blob/master/packages/nx/schemas/nx-schema.json)
 
 * _Example:_
-
     ```json {% fileName="nx.json" %}
     {
       "plugins": [
@@ -120,14 +119,14 @@
   * `nx-cloud`
 * can be set | root of `nx.json`
 
-| Property                | Description                                                                                                                                                                                                                                                                                          |
-| ----------------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| parallel                | max # of targets / run in parallel                                                                                                                                                                                                                                                                   |
-| captureStderr           | cache captures stderr or just stdout                                                                                                                                                                                                                                                                 |
-| skipNxCache             | Nx Cache -- should be -- skipped (defaults to `false`)                                                                                                                                                                                                                                               |
-| cacheDirectory          | directory / local cache is stored (defaults to `.nx/cache`)                                                                                                                                                                                                                                          |
-| encryptionKey           | requirements: `"nx-cloud"` <br/> encryption key -- for supporting -- end-to-end encryption of your cloud cache <br/> optional `NX_CLOUD_ENCRYPTION_KEY` / contains  encryption key -- as its -- value <br/> Nx Cloud task runner -- normalizes the -- key length ->  ANY length of key is acceptable |
-| selectivelyHashTsConfig | ONLY hash the path mapping of the active project in the `tsconfig.base.json` <br/> _Example:_ adding/removing projects does NOT affect the hash of existing projects <br/> defaults to `false`                                                                                                       |
+| Property                | Description                                                                                                                                                                                                                                                                                         |
+| ----------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `parallel`                | max # of targets / run in parallel <br/> == CL's argument `--parallel`                                                                                                                                                                                                                              |
+| `captureStderr`           | cache captures stderr or just stdout                                                                                                                                                                                                                                                                |
+| `skipNxCache`             | Nx Cache -- should be -- skipped <br/> by default, `false`                                                                                                                                                                                                                                          |
+| `cacheDirectory`          | directory / local cache is stored <br/> by default, `.nx/cache`                                                                                                                                                                                                                                  |
+| `encryptionKey`           | requirements: `"nx-cloud"` <br/> encryption key -- for supporting -- end-to-end encryption of your cloud cache <br/> optional `NX_CLOUD_ENCRYPTION_KEY` / contains  encryption key -- as its -- value <br/> Nx Cloud task runner -- normalizes the -- key length ->  ANY length of key is acceptable |
+| `selectivelyHashTsConfig` | ONLY hash the path mapping of the active project in the `tsconfig.base.json` <br/> _Example:_ adding/removing projects does NOT affect the hash of existing projects <br/> defaults to `false`                                                                                                      |
 
 * way to pass
   * | `nx.json`
@@ -168,19 +167,19 @@
 
 ## Target Defaults
 
+* allows
+    * setting COMMON options / particular target | your workspace
+* ways to match targetDefault -- against -- configuration / given target
+    * `${executor}`
+        * ⚠️precedence ⚠️
+            * == if you specify `${executor}` & `${targetName}` -> `${executor}` takes priority
+    * `${targetName}`
+
 * TODO:
-Target defaults provide ways to set common options for a particular target in your workspace. When building your project's configuration, we merge it with up to 1 default from this map. For a given target, we look at its name and its executor. We then check target defaults looking for a configuration whose key matches any of the following:
-
-- `` `${executor}` ``
-- `` `${targetName}` `` (if the configuration specifies the executor, this needs to match the target's executor as well)
-
-Target defaults matching the executor takes precedence over those matching the target name. If we find a target default for a given target, we use it as the base for that target's configuration.
-
 {% callout type="warning" title="Beware" %}
-When using a target name as the key of a target default, make sure all the targets with that name use the same executor or that the target defaults you're setting make sense to all targets regardless of the executor they use. Anything set in a target default will also override the configuration of [tasks inferred by plugins](/concepts/inferred-tasks).
+When using a target name as the key of a target default, make sure all the targets with that name use the same executor or that the target defaults you're setting make sense to all targets regardless of the executor they use. 
+Anything set in a target default will also override the configuration of [tasks inferred by plugins](/concepts/inferred-tasks).
 {% /callout %}
-
-Some common scenarios for this follow.
 
 ### inputs & namedInputs
 
