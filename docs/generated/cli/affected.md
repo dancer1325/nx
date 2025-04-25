@@ -5,35 +5,41 @@ description: 'Run target for affected projects'
 
 # affected
 
-Run target for affected projects
+* Run target | AFFECTED projects
 
 ## Usage
 
 ```shell
 nx affected
-```
 
-Install `nx` globally to invoke the command directly using `nx`, or use `npx nx`, `yarn nx`, or `pnpm nx`.
+npx nx affected
+
+yarn nx affected
+
+pnpm nx affected
+```
 
 ### Examples
 
-Run custom target for all affected projects:
+* TODO: Check project | to run it
+* `-t customTarget`
+  * run CUSTOM target | ALL affected projects
+    ```shell
+     nx affected -t custom-target
+    ```
+* `-t target1 target2 ...`
+  * run >1 targets | ALL affected projects
+  * requirements
+    * Nx v15.4+
+    ```shell
+     nx affected -t lint test build
+    ```   
 
-```shell
- nx affected -t custom-target
-```
-
-Run tests in parallel:
-
-```shell
- nx affected -t test --parallel=5
-```
-
-Run lint, test, and build targets for affected projects. Requires Nx v15.4+:
-
-```shell
- nx affected -t lint test build
-```
+* `--parallel=NumberInParallell`
+  * == run tests in parallel
+    ```shell
+     nx affected -t test --parallel=5
+    ```
 
 Run tests for all the projects affected by changing the index.ts file:
 
@@ -87,15 +93,15 @@ Print the task graph to the console:
 
 ### ~~all~~
 
-Type: `boolean`
-
-**Deprecated:** Use `nx run-many` instead
+* Type: `boolean`
+* ⚠️**Deprecated:** ⚠️
+  * ⚠️use `nx run-many` ⚠️
 
 ### base
 
-Type: `string`
-
-Base of the current branch (usually main)
+* Type: `string`
+* CURRENT branch's base
+  * USUALLY, main
 
 ### batch
 
@@ -174,9 +180,9 @@ Defines how Nx emits outputs tasks logs
 
 ### parallel
 
-Type: `string`
-
-Max number of parallel processes [default is 3]
+* Type: `string`
+* MAX NUMBER of parallel processes
+* by default, 3
 
 ### runner
 
@@ -194,9 +200,8 @@ Rerun the tasks even when the results are available in the cache
 
 ### targets
 
-Type: `string`
-
-Tasks to run for affected projects
+* Type: `string`
+* == affected projects' 👀tasks to run 👀 
 
 ### uncommitted
 
