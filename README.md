@@ -34,5 +34,5 @@
 
 # Community
 
-- [Nx.Dev Community Page](https://nx.dev/community)
+- [Nx.Dev](nx-dev)
 - [Nx | YouTube](https://www.youtube.com/playlist?list=PLakNactNC1dE8KLQ5zd3fQwu_yQHjTmR5)
